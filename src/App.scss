@@ -1,0 +1,187 @@
+@import 'shared.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.bcg {
+  position: relative;
+  display: block;
+  background-image: $backgroundImg;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+.center {
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* basic grid */
+
+*, 
+*:after, 
+*:before {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/*grid*/
+
+.container {
+  @include wrapper(1200px);
+}
+
+.row {
+  @include containerBase;
+  width: 100%;
+}
+
+.col__12, .col__11, .col__10, .col__9, .col__8, .col__7, .col__6, .col__5, .col__4, .col__3, .col__2, .col__1 {
+  @include containerBase;
+}
+
+.col__12 {
+  width: 100%;
+}
+
+.col__11 {
+  width: calc((11/12)*100%);
+}
+
+.col__10 {
+  width: calc((10/12)*100%);
+}
+
+.col__9 {
+  width: calc((9/12)*100%);
+}
+
+.col__8 {
+  width: calc((8/12)*100%);
+}
+
+.col__7 {
+  width: calc((7/12)*100%);
+}
+
+.col__6 {
+  width: calc((6/12)*100%);
+}
+
+.col__5 {
+  width: calc((5/12)*100%);
+}
+
+.col__4 {
+  width: calc((4/12)*100%);
+}
+
+.col__3 {
+  width: calc((3/12)*100%);
+}
+
+.col__2 {
+  width: calc((2/12)*100%);
+}
+
+.col__1 {
+  width: calc((1/12)*100%);
+}
+
+[class*="col__"]:before,
+[class*="col__"]:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.pull-left {
+  float: left !important;
+}
+
+.pull-right {
+  float: right !important;
+}
+
+.dashboard {
+  background-color: $backgroundColor;
+  min-height: 640px;
+  padding: 40px 50px;
+  @include setPosXY(0,10%);
+  @include setTransform(0,20%)
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  font-family: $ptSans;
+  font-weight: bold;
+  color: $primaryColor;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 60px;
+  letter-spacing: 0.05em;
+  @include setPosXY(0,0);
+  @include setTransform(0,50%)
+}
+
+h2 {
+  font-size: 60px;
+  letter-spacing: 0.05em;
+}
+
+.btn.location {
+  width: 400px;
+  height: 75px;
+  @include setPosXY(0,0);
+  @include setTransform(0,300%);
+  border-radius: 10px;
+  background: $btnColor -webkit-linear-gradient(left,  rgba(238,99,131,0.4) 50%, rgba(255,255,255,0.4) 100%);
+  cursor: pointer;
+}
+
+.btn.location span {
+  font-size: 40px;
+  color: $primaryColor;
+  font-weight: normal;
+  letter-spacing: 0.01em
+}
+
+.close {
+  position: relative;
+  display: block;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  background-color: $btnColor;
+  cursor: pointer;
+}
+
+.close::after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 18px;
+  height: 18px;
+  background-image: $closeIcon;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 1;
+  @include setPosXY(50%,50%);
+  @include setTransform(-45%,-48%);
+}
+
+p.week-day {
+  font-size: 30px;
+}
