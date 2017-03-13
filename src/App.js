@@ -110,7 +110,7 @@ class LocationsInfo extends React.Component {
 class LocationInfo extends React.Component {
   render() {
     
-  const unixTimestampToHuman = function (timestamp) {
+  const unixTimestampToHuman = timestamp => {
 
     const newDate = new Date();
     newDate.setTime(timestamp * 1000);
@@ -119,8 +119,8 @@ class LocationInfo extends React.Component {
 
     return hours + ":" + minutes;
 
-  }
-  
+  };
+
     return (
       <div className="row">
         <div className="col__6">
