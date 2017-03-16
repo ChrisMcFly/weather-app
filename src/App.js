@@ -5,94 +5,61 @@ import 'whatwg-fetch';
 class App extends React.Component {
 
   state = {
-    data: [
-      {
-        base: "stations",
-        clouds: {
-          all: 8
-        },
-        cod: 200,
-        coord: {
-          lat: 51.51,
-          lon: -0.13
-        },
-        dt: 1489416600,
-        id: 2643743,
-        main: {
-          humidity: 44,
-          pressure: 1029,
-          temp: 15,
-          temp_max: 16,
-          temp_min: 7
-        },
-        name: "London",
-        sys: {
-          country: "GB",
-          id: 5091,
-          message: 1.7248,
-          sunrise: 1489385848,
-          sunset: 1489428179,
-          type: 1
-        },
-        visibility: 1000,
-        weather: [
-          0: {
-            description: "clear sky",
-            icon: "02d",
-            id: 800,
-            main: "Clear"
-          }
-        ],
-        wind: {
-          deg: 280,
-          speed: 4.1
-        }
-        // id: 801,
-        // name: "Postalm",
-        // country: "Au",
-        // temp: "7",
-        // dt: 1488894600,
-        // sunrise: 1489213336,
-        // sunset: 1489255159,
-        // isOpen: false,
-        // date: "06 Mar 2017",
-        // weekDay: "Monday" 
-      }
-    ],
+    data: [],
     positionData: {}
   };
 
-  componentWillMount() {
-    this.loadPositionDataFromIP;
-    this.fetchPosData = setInterval(this.loadPositionDataFromIP, 1);
+  componentDidMount() {
+    this.getPositionData();
   }
 
-  componentWillUnmount() {
-    clearInterval(this.fetchPosData);
-  }
+  getPositionData = () => {
+    fetch('http://freegeoip.net/json/')
+      .then(res => {
+        res.json().then(json => {
+          const pos = {
+            lat: json.latitude,
+            lon: json.longitude
+          };
+          this.setState({
+            positionData: pos
+          });
+        });
+    });
+  };
 
-  // loadPositionDataFromIP = () => {
-  //   return fetch('http://freegeoip.net/json/')
-  //   .then(res => {
-  //     res.json().then(json => {
-  //       const pos = {
-  //         lat: json.latitude,
-  //         lon: json.longitude
-  //       };
-  //       this.setState({
-  //         positionData: pos
-  //       });
-  //     });
-  //   });
-  // }
+  handleWeatherData = () => {
+    let lat = this.state.positionData.lat,
+        lon = this.state.positionData.lon;
+    const API_KEY = 'f82dadc574f85cab41e3e12f10295cdc',
+          API_URL = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+    if(this.state.data.length === 0){
+      return fetch(API_URL).then(res => {
+        res.json().then(json => {
+          this.setState({
+            data: this.state.data.concat(json)
+          });
+        });
+      });
+    }
+    return false;
+  };
+
+ handleDate = (timestamp) => {
+    const newDate = new Date(timestamp);
+    let dateArr = [];
+    dateArr.push(newDate.toString().split(' '));
+    console.log(dateArr);
+  };
 
   render() {
-
     return (
       <div className="bcg center">
         <WeatherAppBody 
           data={this.state.data}
           positionData={this.state.positionData}
+          getWeatherData={this.handleWeatherData}
+          getDate={this.handleDate}
         />
       </div>
     );
@@ -100,26 +67,16 @@ class App extends React.Component {
 }
 
 class WeatherAppBody extends React.Component {
-
-  // componentDidUpdate() {
-  //   let lat = this.props.positionData.lat,
-  //       lon = this.props.positionData.lon;
-  //   const API_KEY = "&appid=f82dadc574f85cab41e3e12f10295cdc",
-  //         API_URL = "http://api.openweathermap.org/data/2.5/weather?" + "lat=" + lat + "&" + "lon=" + lon + API_KEY;
-  //   fetch(API_URL).then(res => {
-  //     res.json().then(json => {
-  //       this.setState({
-  //         data: this.state.data.concat(d)
-  //       }.bind(this));
-  //     });
-  //   });
-  // }
-
   render() {
     return (
       <div className="container center">
         <div className="col__12 dashboard"> 
-          <LocationToggle data={this.props.data}/>
+          <LocationToggle 
+            data={this.props.data}
+            positionData={this.props.positionData}
+            getWeatherData={this.props.getWeatherData}
+            getDate={this.props.getDate}
+          />
         </div>
       </div>
     )
@@ -146,10 +103,12 @@ class LocationToggle extends React.Component {
 
   render() {
     if(this.state.isOpen){
+     this.props.getWeatherData();
      return (
         <LocationsInfo 
           data={this.props.data}
           onCloseClick={this.handleLocationClose}
+          getDate={this.props.getDate}
         />
       );
     } else {
@@ -162,8 +121,6 @@ class LocationToggle extends React.Component {
   }
 
 }
-
-
 
 class LocationsInfo extends React.Component {
   render() {
@@ -180,6 +137,7 @@ class LocationsInfo extends React.Component {
         date={datum.date}
         weekDay={Date.now()}
         onCloseClick={this.props.onCloseClick}
+        getDate={this.props.getDate}
       />
     ));
     return (
@@ -215,18 +173,11 @@ class LocationInfo extends React.Component {
       return padded;
     }
 
-    // function getDate() {
-    //   const newDate = Date.now();
-    //   console.log(newDate);
-    // }
-
-    // getDate();
-
     return (
       <div className="row">
         <div className="col__6">
           <h2>{this.props.name} {this.props.country}</h2>
-          <p className="week-day">{this.props.weekDay} {this.props.date}</p>
+          <p className="week-day">{this.props.getDate(this.props.weekDay)}</p>
         </div>
         <div className="col__6">
           <span className="close pull-right" onClick={this.props.onCloseClick}></span>
