@@ -1,4 +1,5 @@
 @import 'shared.scss';
+@import 'icons.scss';
 
 * {
   margin: 0;
@@ -126,7 +127,6 @@ h1, h2, h3, h4, h5, h6, p {
   font-family: $ptSans;
   font-weight: bold;
   color: $primaryColor;
-  text-transform: uppercase;
 }
 
 h1 {
@@ -139,6 +139,22 @@ h1 {
 h2 {
   font-size: 60px;
   letter-spacing: 0.05em;
+}
+
+p {
+  font-size: 30px;
+  font-weight: bold; 
+}
+
+p.temp{
+  @include setPosXY(0,0);
+  @include setTransform(0,50%);
+  padding-bottom: 50px;
+}
+
+p.temp i {
+  font-size: 60px;
+  font-style: normal;
 }
 
 .btn.location {
@@ -184,4 +200,15 @@ h2 {
 
 p.week-day {
   font-size: 30px;
+}
+
+
+// Media query
+// 980px
+
+@media (max-width: 980px){
+  .col__12, .col__11, .col__10, .col__9, .col__8, .col__7, .col__6, .col__5, .col__4, .col__3, .col__2, .col__1 {
+    width: 100%;
+    text-align: center;
+  }
 }

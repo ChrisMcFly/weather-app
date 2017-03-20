@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import 'whatwg-fetch';
+import moment from 'moment';
 
 class App extends React.Component {
 
@@ -32,7 +33,7 @@ class App extends React.Component {
     let lat = this.state.positionData.lat,
         lon = this.state.positionData.lon;
     const API_KEY = 'f82dadc574f85cab41e3e12f10295cdc',
-          API_URL = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+          API_URL = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
     if(this.state.data.length === 0){
       return fetch(API_URL).then(res => {
         res.json().then(json => {
@@ -45,11 +46,8 @@ class App extends React.Component {
     return false;
   };
 
- handleDate = (timestamp) => {
-    const newDate = new Date(timestamp);
-    let dateArr = [];
-    dateArr.push(newDate.toString().split(' '));
-    console.log(dateArr);
+ handleDate = () => {
+    return moment().format('dddd D MMM YYYY');
   };
 
   render() {
@@ -134,8 +132,10 @@ class LocationsInfo extends React.Component {
         dt={datum.dt}
         sunrise={datum.sys.sunrise}
         sunset={datum.sys.sunset}
+        weather={datum.weather}
+        description={datum.weather.description}
+        icon={datum.weather.icon}
         date={datum.date}
-        weekDay={Date.now()}
         onCloseClick={this.props.onCloseClick}
         getDate={this.props.getDate}
       />
@@ -173,23 +173,148 @@ class LocationInfo extends React.Component {
       return padded;
     }
 
+    const weatherData = (elem) => {
+      if(elem.length >= 1){
+        let elemArr = [];
+        elemArr.push(elem[0]);
+        return elemArr;
+      } 
+      return elem;
+    };
+
     return (
-      <div className="row">
-        <div className="col__6">
-          <h2>{this.props.name} {this.props.country}</h2>
-          <p className="week-day">{this.props.getDate(this.props.weekDay)}</p>
-        </div>
-        <div className="col__6">
+      <div>
+        <div className="row">
           <span className="close pull-right" onClick={this.props.onCloseClick}></span>
-          <div className="row">
-            <p className="col__6 sun-rise">Sunrise {unixTimestampToHuman(this.props.sunrise)}</p>
-            <p className="col__6 sun-set">Sunset {unixTimestampToHuman(this.props.sunset)}</p>
+          <div className="col__6">
+            <h2>{this.props.name} {this.props.country}</h2>
+            <p className="week-day">{this.props.getDate()}</p>
           </div>
+          <div className="col__6">
+            <div className="row">
+              <p className="col__6 sun-rise">Sunrise {unixTimestampToHuman(this.props.sunrise)}</p>
+              <p className="col__6 sun-set">Sunset {unixTimestampToHuman(this.props.sunset)}</p>
+            </div>
+          </div>
+          <WeatherConditions
+              weather={weatherData(this.props.weather)}
+              temp={this.props.temp}
+          />
         </div>
       </div>
     )
   }
 
+}
+
+class WeatherConditions extends React.Component {
+  render(){
+    console.log(this.props.weather)
+    const weather = this.props.weather.map((datum) => (
+      <WeatherInfo 
+        id={datum.id}
+        key={datum.id}
+        description={datum.description}
+        icon={datum.icon}
+        main={datum.main}
+        temp={this.props.temp}
+      />
+    ));
+    return (
+      <div>
+        {weather}
+      </div>
+    );
+  }
+}
+
+class WeatherInfo extends React.Component {
+  render(){
+
+    function roundNumber(data){
+      return Math.floor(data);
+    }
+
+    return(
+      <div className="row text-center">
+        <div className="col__12"><h2>{this.props.main}</h2></div>
+        <div className="col__12">
+          <IconHandler id={this.props.id}/>
+        </div>
+        <div className="col__12">
+          <p>{this.props.description}</p>
+        </div>
+        <div className="col__12">
+          <p className="temp">Temperature: <i>{roundNumber(this.props.temp)}</i><span>&#8451;</span></p>
+        </div>
+      </div>
+    );
+  }
+}
+
+class IconHandler extends React.Component {
+  render(){
+    const setIcon = conditionId => {
+      if(conditionId >= 500 && conditionId <= 531){
+        return (
+          <div className="icon sun-shower">
+            <div className="cloud"></div>
+            <div className="sun">
+              <div className="rays"></div>
+            </div>
+            <div className="rain"></div>
+          </div>
+        );
+      } else if (conditionId >= 801 && conditionId <= 804){
+        return (
+          <div className="icon cloudy">
+            <div className="cloud"></div>
+            <div className="cloud"></div>
+          </div>
+        );
+      } else if (conditionId >= 200 && conditionId <= 232){
+        return (
+          <div className="icon thunder-storm">
+            <div className="cloud"></div>
+            <div className="lightning">
+              <div className="bolt"></div>
+              <div className="bolt"></div>
+            </div>
+          </div>
+        );
+      } else if (conditionId >= 600 && conditionId <= 622){
+        return (
+          <div className="icon flurries">
+            <div className="cloud"></div>
+            <div className="snow">
+              <div className="flake"></div>
+              <div className="flake"></div>
+            </div>
+          </div>
+        );
+      } else if(conditionId >= 300 && conditionId <= 321){
+        return (
+          <div className="icon rainy">
+            <div className="cloud"></div>
+            <div className="rain"></div>
+          </div>
+        );
+      } else if(conditionId === 800) {
+        return (
+          <div className="icon sunny">
+            <div className="sun">
+              <div className="rays"></div>
+            </div>
+          </div>
+        );
+      }
+    }
+    return (
+      <div>
+        {setIcon(this.props.id)}
+      </div>
+    );
+  }
 }
 
 class GetLocation extends React.Component {
