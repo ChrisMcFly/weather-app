@@ -118,7 +118,7 @@
 .dashboard {
   background-color: $backgroundColor;
   min-height: 640px;
-  padding: 40px 50px;
+  padding: 1% 5%;
   @include setPosXY(0,10%);
   @include setTransform(0,20%)
 }
@@ -182,6 +182,8 @@ p.temp i {
   height: 36px;
   background-color: $btnColor;
   cursor: pointer;
+  @include setPosXY(0,0);
+  @include setTransform(100%,0%);
 }
 
 .close::after {
@@ -211,4 +213,26 @@ p.week-day {
     width: 100%;
     text-align: center;
   }
+
+  .dashboard {
+    padding: 5% 1%;
+  }
+
+  .btn.location {
+    width: 250px;
+    height: 45px;
+  }
+
+  h1, h2 {
+    font-size: 30px;
+  }
+
+  p, .btn.location span {
+    font-size: 18px;
+  }
+
+  .close {
+    @include setTransform(0%,0%);
+  }
+
 }

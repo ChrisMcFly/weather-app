@@ -336,7 +336,7 @@
 .dashboard {
   background-color: rgba(9, 62, 150, 0.2);
   min-height: 640px;
-  padding: 40px 50px;
+  padding: 1% 5%;
   top: 10%;
   left: 0;
   transform: translate(0, 20%); }
@@ -394,7 +394,10 @@ p.temp i {
   width: 36px;
   height: 36px;
   background-color: #ee6383;
-  cursor: pointer; }
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  transform: translate(100%, 0%); }
 
 .close::after {
   content: '';
@@ -416,4 +419,15 @@ p.week-day {
 @media (max-width: 980px) {
   .col__12, .col__11, .col__10, .col__9, .col__8, .col__7, .col__6, .col__5, .col__4, .col__3, .col__2, .col__1 {
     width: 100%;
-    text-align: center; } }
+    text-align: center; }
+  .dashboard {
+    padding: 5% 1%; }
+  .btn.location {
+    width: 250px;
+    height: 45px; }
+  h1, h2 {
+    font-size: 30px; }
+  p, .btn.location span {
+    font-size: 18px; }
+  .close {
+    transform: translate(0%, 0%); } }

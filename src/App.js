@@ -255,24 +255,7 @@ class WeatherInfo extends React.Component {
 class IconHandler extends React.Component {
   render(){
     const setIcon = conditionId => {
-      if(conditionId >= 500 && conditionId <= 531){
-        return (
-          <div className="icon sun-shower">
-            <div className="cloud"></div>
-            <div className="sun">
-              <div className="rays"></div>
-            </div>
-            <div className="rain"></div>
-          </div>
-        );
-      } else if (conditionId >= 801 && conditionId <= 804){
-        return (
-          <div className="icon cloudy">
-            <div className="cloud"></div>
-            <div className="cloud"></div>
-          </div>
-        );
-      } else if (conditionId >= 200 && conditionId <= 232){
+      if (conditionId >= 200 && conditionId <= 232) {
         return (
           <div className="icon thunder-storm">
             <div className="cloud"></div>
@@ -282,7 +265,24 @@ class IconHandler extends React.Component {
             </div>
           </div>
         );
-      } else if (conditionId >= 600 && conditionId <= 622){
+      } else if (conditionId >= 300 && conditionId <= 321) {
+        return (
+          <div className="icon rainy">
+            <div className="cloud"></div>
+            <div className="rain"></div>
+          </div>
+        );
+      } else if (conditionId >= 500 && conditionId <= 531) {
+        return (
+          <div className="icon sun-shower">
+            <div className="cloud"></div>
+            <div className="sun">
+              <div className="rays"></div>
+            </div>
+            <div className="rain"></div>
+          </div>
+        );
+      } else if (conditionId >= 600 && conditionId <= 622) {
         return (
           <div className="icon flurries">
             <div className="cloud"></div>
@@ -292,14 +292,7 @@ class IconHandler extends React.Component {
             </div>
           </div>
         );
-      } else if(conditionId >= 300 && conditionId <= 321){
-        return (
-          <div className="icon rainy">
-            <div className="cloud"></div>
-            <div className="rain"></div>
-          </div>
-        );
-      } else if(conditionId === 800) {
+      } else if (conditionId === 800) {
         return (
           <div className="icon sunny">
             <div className="sun">
@@ -307,7 +300,23 @@ class IconHandler extends React.Component {
             </div>
           </div>
         );
-      }
+      } else if (conditionId === 801) {
+        return (
+          <div className="icon sun-cloudy">
+            <div className="cloud"></div>
+            <div className="sun">
+              <div className="rays"></div>
+            </div>
+          </div>
+        );
+      } else if (conditionId >= 802 && conditionId <= 804) {
+        return (
+          <div className="icon cloudy">
+            <div className="cloud"></div>
+            <div className="cloud"></div>
+          </div>
+        );
+      } 
     }
     return (
       <div>
